@@ -1,0 +1,9 @@
+# Observed carrier-setting command shapes. Values are intentionally synthetic.
+ATZ
+AT&F0
+ATE0
+AT@AUBTSET?
+AT@AUBTSET=0
+AT+CGDCONT=1,"IP","fixture.invalid"
+AT+CGEQMIN=1
+ATD0000000000

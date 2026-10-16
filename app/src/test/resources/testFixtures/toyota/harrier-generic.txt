@@ -1,0 +1,8 @@
+# Command shapes observed from a 60-series Harrier T-Connect navi.
+# Dial digits are synthetic so the fixture contains no phone number.
+ATZ
+AT&F0
+ATE0
+AT@AUBTSET?
+AT@AUBTSET=0
+ATD0000000000

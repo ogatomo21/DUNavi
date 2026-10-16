@@ -1,0 +1,53 @@
+name: Android CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - name: Install Android SDK
+        run: sdkmanager "platforms;android-37.0" "build-tools;36.0.0"
+      - name: Check and build
+        run: |
+          chmod +x gradlew
+          bash scripts/test-release-tag.sh
+          ./gradlew --no-daemon :app:scribeLicensesDebugCheck :app:scribeLicensesReleaseCheck testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest
+      - name: Upload debug APKs
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: DUNavi-debug
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            app/build/outputs/apk/androidTest/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: DUNavi-reports
+          path: |
+            app/build/reports/
+            app/build/test-results/
+          retention-days: 14

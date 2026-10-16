@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.DUNavi" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">#F9F9FF</item>
+        <item name="android:navigationBarColor">#F9F9FF</item>
+    </style>
+</resources>
